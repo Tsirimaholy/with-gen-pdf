@@ -8,15 +8,23 @@ import com.example.withth.models.employeeManagement.entity.Sex;
 import com.example.withth.service.CountryCodeService;
 import com.example.withth.service.EmployeeService;
 import com.example.withth.service.PhoneService;
+import com.lowagie.text.DocumentException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +57,25 @@ public class EmployeeController extends AuthBaseController{
         ModelAndView modelAndView = new ModelAndView("employee/index");
         modelAndView.addObject("filter", new EmployeeFilter());
         return modelAndView;
+    }
+
+    @GetMapping("/pdf")
+    public ResponseEntity<InputStreamResource> getPdf() throws DocumentException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(service.parseEmployeeInfoTemplate());
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=template.pdf");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(inputStream));
     }
 
     @GetMapping("/employee-details")
