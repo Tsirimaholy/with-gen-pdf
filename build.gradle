@@ -28,6 +28,8 @@ dependencies {
     implementation 'org.apache.commons:commons-csv:1.10.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.4'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1'
+    // https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf
+    implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
     compileOnly 'org.projectlombok:lombok'
