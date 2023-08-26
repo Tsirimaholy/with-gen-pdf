@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository repository;
 
-    public User login(User user){
-        return repository.findByUsernameAndPassword(user.getUsername(), user.getPassword())
+    public User login(String username, String password){
+        return repository.findByUsernameAndPassword(username, password)
                 .orElseThrow(()->new RuntimeException("Unauthorized"));
     }
 }

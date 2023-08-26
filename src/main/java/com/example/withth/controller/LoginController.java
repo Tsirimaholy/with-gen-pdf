@@ -2,8 +2,12 @@ package com.example.withth.controller;
 
 import com.example.withth.controller.request.LoginDetails;
 import com.example.withth.models.employeeManagement.entity.Employee;
+import com.example.withth.models.employeeManagement.entity.User;
 import com.example.withth.repository.employeeManagement.EmployeeRepository;
+import com.example.withth.repository.employeeManagement.UserRepository;
+import com.example.withth.service.AuthService;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,12 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class LoginController {
-    private final EmployeeRepository repository;
+    private final AuthService service;
 
-    public LoginController(EmployeeRepository repository) {
-        this.repository = repository;
-    }
 
     @GetMapping("/login")
     public String login() {
@@ -32,13 +34,12 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginDetails loginDetails, HttpSession session) {
-        List<Employee> allByNameAndPasswordEquals = repository.findAllByPasswordAndName(loginDetails.getPassword(), loginDetails.getUsername());
-        if (allByNameAndPasswordEquals.isEmpty()){
+        User authenticatedUser = service.login(loginDetails.getPassword(), loginDetails.getUsername());
+        if (authenticatedUser==null){
             return "redirect:/login";
         }
-        Employee employee = allByNameAndPasswordEquals.get(0);
-        session.setAttribute("AuthUsername", employee.getFirstName());
-        session.setAttribute("AuthPassword", employee.getPassword());
+        session.setAttribute("AuthUsername", authenticatedUser.getUsername());
+        session.setAttribute("AuthPassword", authenticatedUser.getPassword());
         return "redirect:/";
     }
 }
