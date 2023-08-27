@@ -51,6 +51,7 @@
         </td>
         <td class="main-employee-infos">
             <div style="float: right;">
+                <h3>Employee a</h3>
                 <div class="d-flex align-items-center mb-3">
                     <label class="me-2 fw-bold">Matriculate number:</label>
                     <span th:text="${employee.matriculate}" class="flex-grow-1 bg-light p-1 rounded"></span>
@@ -74,8 +75,8 @@
                           class="flex-grow-1 bg-light p-1 rounded">Unknow</span>
                 </div>
                 <div class="d-flex align-items-center mb-3">
-                    <label class="me-2 fw-bold">Birth date:</label>
-                    <span th:text="${employee.birthDate}" class="flex-grow-1 bg-light p-1 rounded">Unknow</span>
+                    <label class="me-2 fw-bold">Age:</label>
+                    <span th:text="${employee.getAge()}" class="flex-grow-1 bg-light p-1 rounded">Unknow</span>
                 </div>
                 <div class="d-flex align-items-center mb-3">
                     <label class="me-2 fw-bold">Email:</label>
@@ -88,9 +89,8 @@
 <section class="section-salary">
     <header>Salary informations</header>
     <div class="d-flex align-items-center mb-3">
-        <label class="me-2 fw-bold">Actual salary:</label>
-        <span th:text="${employee.salary}"
-              class="flex-grow-1 bg-light p-1 rounded">Unknow</span><span>Ariary/ mois</span>
+        <label class="me-2 fw-bold">Actual Gross salary:</label>
+        <span th:text="${employee.salary}" class="flex-grow-1 bg-light p-1 rounded">Unknow</span><span>Ariary/ mois</span>
     </div>
 </section>
 <footer>

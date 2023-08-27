@@ -1,5 +1,6 @@
 package com.example.withth.models.employeeManagement.entity;
 
+import com.example.withth.service.utils.DateUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,8 @@ public class Employee implements Serializable {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
+    @Transient
+    private byte age;
     @Enumerated(EnumType.STRING)
     private Sex sex;
     private String profilePicture;
@@ -54,18 +57,26 @@ public class Employee implements Serializable {
     @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Phone> phones = new ArrayList<>();
 
-    public void addPhone(Phone phone){
-        if (!this.getPhones().contains(phone)){
+    public void addPhone(Phone phone) {
+        if (!this.getPhones().contains(phone)) {
             this.getPhones().add(phone);
             phone.setEmployee(this);
         }
     }
-    public void addAllPhones(List<Phone> phones){
+
+    public void addAllPhones(List<Phone> phones) {
         phones.forEach(this::addPhone);
     }
 
     public String getMatriculate() {
         return "EMP" + this.id;
+    }
+
+    public byte getAge() {
+        if (birthDate == null) {
+            return 0;
+        }
+        return (byte) DateUtils.calculateAgeAtExactBirthday(this.getBirthDate(), null);
     }
 }
 
