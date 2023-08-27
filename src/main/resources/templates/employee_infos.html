@@ -45,13 +45,13 @@
 <body>
 <table>
     <tr>
-        <td>
-            <img th:src="${'data:image/jpeg;base64,' + company.getLogo()}" alt="profile picture" width="30"
-                 height="24"/>
+        <td style="vertical-align: top">
+            <img th:src="${'data:image/jpeg;base64,' + employee.getProfilePicture()}" alt="profile picture" width="140"
+            style="border: 1px solid #ddd;border-radius: 4px;"/>
         </td>
         <td class="main-employee-infos">
             <div style="float: right;">
-                <h3>Employee a</h3>
+                <h3>Employee data sheet</h3>
                 <div class="d-flex align-items-center mb-3">
                     <label class="me-2 fw-bold">Matriculate number:</label>
                     <span th:text="${employee.matriculate}" class="flex-grow-1 bg-light p-1 rounded"></span>
@@ -90,14 +90,15 @@
     <header>Salary informations</header>
     <div class="d-flex align-items-center mb-3">
         <label class="me-2 fw-bold">Actual Gross salary:</label>
-        <span th:text="${employee.salary}" class="flex-grow-1 bg-light p-1 rounded">Unknow</span><span>Ariary/ mois</span>
+        <span th:text="${employee.salary}?:'UNKNOWN'" class="flex-grow-1 bg-light p-1 rounded"></span>
+        <span th:if="${employee.salary}">Ariary/ mois</span>
     </div>
 </section>
 <footer>
     <table>
         <tr>
-            <td>
-                <img th:src="${'data:image/jpeg;base64,' + company.getLogo()}" alt="Logo" width="30" height="24"/>
+            <td >
+                <img th:src="${'data:image/jpeg;base64,' + company.getLogo()}" alt="Logo" width="40" height="40"/>
             </td>
             <td>
                 <div>
@@ -121,10 +122,12 @@
                         <label class="me-2 fw-bold">Address:</label>
                         <span th:text="${company.address}"></span>
                     </div>
-                    <div class="d-flex align-items-center mb-3">
-                        <label class="me-2 fw-bold">Phone numbers:</label>
-                        <span th:text="${company.telephones}"></span>
-                    </div>
+                        <div>
+                            <label class="me-2 fw-bold">Phone numbers:</label>
+                            <ul class="d-flex align-items-center mb-3" th:each="phone :${employee.phones}">
+                                <li th:text="${phone.countryCode.content}+' '+${phone.number}" class="flex-grow-1 bg-light p-1 rounded">Unknow</li>
+                            </ul>
+                        </div>
                     <div class="d-flex align-items-center mb-3">
                         <label class="me-2 fw-bold">Email:</label>
                         <span th:text="${company.emailContact}"></span>
