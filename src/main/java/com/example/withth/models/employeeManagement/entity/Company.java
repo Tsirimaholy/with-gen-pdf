@@ -2,6 +2,7 @@ package com.example.withth.models.employeeManagement.entity;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class Company implements Serializable {
     private String slogan;
     private String address;
     private String emailContact;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> telephones;
     private String nif;
     private String stat;
