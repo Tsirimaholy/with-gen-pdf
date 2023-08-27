@@ -9,7 +9,7 @@ public class DateUtils {
             currentDate = LocalDate.now();
         }
         if (birthdate == null) {
-            throw new IllegalArgumentException("Birth date cannot be null");
+            return 0;
         }
 
         return Period.between(birthdate, currentDate).getYears();

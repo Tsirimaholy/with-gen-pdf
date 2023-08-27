@@ -72,12 +72,9 @@ public class Employee implements Serializable {
     public String getMatriculate() {
         return "EMP" + this.id;
     }
-
-    public byte getAge() {
-        if (birthDate == null) {
-            return 0;
-        }
-        return (byte) DateUtils.calculateAgeAtExactBirthday(this.getBirthDate(), null);
+    @PostLoad
+    public void loadAge(){
+        age=(byte) DateUtils.calculateAgeAtExactBirthday(this.getBirthDate(), null);
     }
 }
 
