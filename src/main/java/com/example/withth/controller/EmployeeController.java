@@ -5,10 +5,12 @@ import com.example.withth.models.employeeManagement.entity.CountryCode;
 import com.example.withth.models.employeeManagement.entity.Employee;
 import com.example.withth.models.employeeManagement.entity.Phone;
 import com.example.withth.models.employeeManagement.entity.Sex;
+import com.example.withth.service.CompanyService;
 import com.example.withth.service.CountryCodeService;
 import com.example.withth.service.EmployeeService;
 import com.example.withth.service.PhoneService;
 import com.lowagie.text.DocumentException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -36,6 +38,7 @@ public class EmployeeController extends AuthBaseController{
     private final EmployeeService service;
     private final CountryCodeService countryCodeService;
     private final PhoneService phoneService;
+    private final CompanyService companyService;
 
     @ModelAttribute("employeeList")
     public List<Employee> getEmployees() {
@@ -59,13 +62,16 @@ public class EmployeeController extends AuthBaseController{
         return modelAndView;
     }
 
-    @GetMapping("/pdf")
-    public ResponseEntity<InputStreamResource> getPdf() throws DocumentException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    @GetMapping("/pdf/{id}")
+    public ResponseEntity<InputStreamResource> getPdf(@PathVariable("id") Long employeeId, HttpServletRequest request, HttpServletResponse response) throws DocumentException {
+        Employee employee = service.findById(employeeId);
+        String parsedHtml = service.parseEmployeeInfoTemplate(employee, request, response);
 
         ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocumentFromString(service.parseEmployeeInfoTemplate());
+        renderer.setDocumentFromString(parsedHtml);
         renderer.layout();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         renderer.createPDF(outputStream);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
@@ -76,6 +82,15 @@ public class EmployeeController extends AuthBaseController{
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(inputStream));
+    }
+
+    @GetMapping("/pdf")
+    public ModelAndView getEmployeePdfgetPdf() {
+        ModelAndView modelAndView = new ModelAndView("employee_infos");
+        Employee employee = service.findById(2L);
+        modelAndView.addObject("employee", employee);
+        modelAndView.addObject("company", companyService.getCompanyDetails(1L));
+        return modelAndView;
     }
 
     @GetMapping("/employee-details")
