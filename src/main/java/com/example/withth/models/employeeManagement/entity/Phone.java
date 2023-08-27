@@ -29,4 +29,9 @@ public class Phone implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
 }

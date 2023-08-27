@@ -1,10 +1,6 @@
 package com.example.withth.models.employeeManagement.entity;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -32,8 +29,8 @@ public class Company implements Serializable {
     private String slogan;
     private String address;
     private String emailContact;
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> telephones;
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Phone> phones = new ArrayList<>();
     private String nif;
     private String stat;
     private String rcs;
