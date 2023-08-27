@@ -49,6 +49,7 @@ public class Employee implements Serializable {
     private String professionalCategory;
     private String cnaps;
     private String password;
+    private Double salary;
 
     @OneToMany(mappedBy = "employee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Phone> phones = new ArrayList<>();
