@@ -34,7 +34,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute LoginDetails loginDetails, HttpSession session) {
-        User authenticatedUser = service.login(loginDetails.getPassword(), loginDetails.getUsername());
+        User authenticatedUser = service.login(loginDetails.getUsername(), loginDetails.getPassword());
         if (authenticatedUser==null){
             return "redirect:/login";
         }
