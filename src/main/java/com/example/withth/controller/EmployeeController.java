@@ -29,6 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -160,7 +161,9 @@ public class EmployeeController extends AuthBaseController{
     @PostMapping(value = "/save")
     public String save(@ModelAttribute Employee employee, @ModelAttribute("file") MultipartFile file, Model model) throws IOException {
         if (!file.isEmpty()) {
-            employee.setProfilePicture(file.getOriginalFilename());
+            Base64.Encoder encoder = Base64.getEncoder();
+            String base64Image = encoder.encodeToString(file.getBytes());
+            employee.setProfilePicture(base64Image);
             employee.setContent(file.getBytes());
             employee.setSize(file.getSize());
         }
@@ -206,8 +209,11 @@ public class EmployeeController extends AuthBaseController{
             Employee oldEmployee = service.findById(employee.getId());
             content = oldEmployee.getContent();
         } else {
+            Base64.Encoder encoder = Base64.getEncoder();
+            String base64Image = encoder.encodeToString(file.getBytes());
+            employee.setProfilePicture(base64Image);
+            employee.setContent(file.getBytes());
             employee.setSize(file.getSize());
-            employee.setProfilePicture(file.getOriginalFilename());
             content = file.getBytes();
         }
         employee.setContent(content);

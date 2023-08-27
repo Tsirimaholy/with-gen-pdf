@@ -35,6 +35,7 @@ public class Employee implements Serializable {
     private byte age;
     @Enumerated(EnumType.STRING)
     private Sex sex;
+    @Lob
     private String profilePicture;
     private byte[] content;
     private long size;
